@@ -1,0 +1,193 @@
+   1              		.file	"hanoi.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.rodata
+   5              	.LC0:
+   6 0000 4D6F7665 		.string	"Move disk 1 from %c to %c\n"
+   6      20646973 
+   6      6B203120 
+   6      66726F6D 
+   6      20256320 
+   7              	.LC1:
+   8 001b 4D6F7665 		.string	"Move disk %d from %c to %c\n"
+   8      20646973 
+   8      6B202564 
+   8      2066726F 
+   8      6D202563 
+   9              		.text
+  10              		.globl	hanoi
+  12              	hanoi:
+  13              	.LFB0:
+  14              		.file 1 "hanoi.c"
+   1:hanoi.c       **** #include <stdio.h>
+   2:hanoi.c       **** void hanoi(int n, char from, char to, char aux)
+   3:hanoi.c       **** {
+  15              		.loc 1 3 1
+  16              		.cfi_startproc
+  17 0000 55       		pushl	%ebp
+  18              		.cfi_def_cfa_offset 8
+  19              		.cfi_offset 5, -8
+  20 0001 89E5     		movl	%esp, %ebp
+  21              		.cfi_def_cfa_register 5
+  22 0003 56       		pushl	%esi
+  23 0004 53       		pushl	%ebx
+  24 0005 83EC10   		subl	$16, %esp
+  25              		.cfi_offset 6, -12
+  26              		.cfi_offset 3, -16
+  27 0008 E8FCFFFF 		call	__x86.get_pc_thunk.bx
+  27      FF
+  28 000d 81C30200 		addl	$_GLOBAL_OFFSET_TABLE_, %ebx
+  28      0000
+  29 0013 8B4D0C   		movl	12(%ebp), %ecx
+  30 0016 8B5510   		movl	16(%ebp), %edx
+  31 0019 8B4514   		movl	20(%ebp), %eax
+  32 001c 884DF4   		movb	%cl, -12(%ebp)
+  33 001f 8855F0   		movb	%dl, -16(%ebp)
+  34 0022 8845EC   		movb	%al, -20(%ebp)
+   4:hanoi.c       ****     if (n == 1)
+  35              		.loc 1 4 8
+  36 0025 837D0801 		cmpl	$1, 8(%ebp)
+  37 0029 751E     		jne	.L2
+   5:hanoi.c       ****         printf("Move disk 1 from %c to %c\n", from, to);
+  38              		.loc 1 5 9
+  39 002b 0FBE55F0 		movsbl	-16(%ebp), %edx
+  40 002f 0FBE45F4 		movsbl	-12(%ebp), %eax
+  41 0033 83EC04   		subl	$4, %esp
+  42 0036 52       		pushl	%edx
+  43 0037 50       		pushl	%eax
+  44 0038 8D830000 		leal	.LC0@GOTOFF(%ebx), %eax
+  44      0000
+  45 003e 50       		pushl	%eax
+  46 003f E8FCFFFF 		call	printf@PLT
+  46      FF
+  47 0044 83C410   		addl	$16, %esp
+   6:hanoi.c       ****     else
+   7:hanoi.c       ****     {
+   8:hanoi.c       ****         hanoi(n - 1, from, aux, to);
+   9:hanoi.c       ****         printf("Move disk %d from %c to %c\n", n, from, to);
+  10:hanoi.c       ****         hanoi(n - 1, aux, to, from);
+  11:hanoi.c       ****     }
+  12:hanoi.c       **** }
+  48              		.loc 1 12 1
+  49 0047 EB58     		jmp	.L4
+  50              	.L2:
+   8:hanoi.c       ****         printf("Move disk %d from %c to %c\n", n, from, to);
+  51              		.loc 1 8 9
+  52 0049 0FBE4DF0 		movsbl	-16(%ebp), %ecx
+  53 004d 0FBE55EC 		movsbl	-20(%ebp), %edx
+  54 0051 0FBE45F4 		movsbl	-12(%ebp), %eax
+  55 0055 8B7508   		movl	8(%ebp), %esi
+  56 0058 83EE01   		subl	$1, %esi
+  57 005b 51       		pushl	%ecx
+  58 005c 52       		pushl	%edx
+  59 005d 50       		pushl	%eax
+  60 005e 56       		pushl	%esi
+  61 005f E8FCFFFF 		call	hanoi
+  61      FF
+  62 0064 83C410   		addl	$16, %esp
+   9:hanoi.c       ****         hanoi(n - 1, aux, to, from);
+  63              		.loc 1 9 9
+  64 0067 0FBE55F0 		movsbl	-16(%ebp), %edx
+  65 006b 0FBE45F4 		movsbl	-12(%ebp), %eax
+  66 006f 52       		pushl	%edx
+  67 0070 50       		pushl	%eax
+  68 0071 FF7508   		pushl	8(%ebp)
+  69 0074 8D831B00 		leal	.LC1@GOTOFF(%ebx), %eax
+  69      0000
+  70 007a 50       		pushl	%eax
+  71 007b E8FCFFFF 		call	printf@PLT
+  71      FF
+  72 0080 83C410   		addl	$16, %esp
+  10:hanoi.c       ****     }
+  73              		.loc 1 10 9
+  74 0083 0FBE4DF4 		movsbl	-12(%ebp), %ecx
+  75 0087 0FBE55F0 		movsbl	-16(%ebp), %edx
+  76 008b 0FBE45EC 		movsbl	-20(%ebp), %eax
+  77 008f 8B5D08   		movl	8(%ebp), %ebx
+  78 0092 83EB01   		subl	$1, %ebx
+  79 0095 51       		pushl	%ecx
+  80 0096 52       		pushl	%edx
+  81 0097 50       		pushl	%eax
+  82 0098 53       		pushl	%ebx
+  83 0099 E8FCFFFF 		call	hanoi
+  83      FF
+  84 009e 83C410   		addl	$16, %esp
+  85              	.L4:
+  86              		.loc 1 12 1
+  87 00a1 90       		nop
+  88 00a2 8D65F8   		leal	-8(%ebp), %esp
+  89 00a5 5B       		popl	%ebx
+  90              		.cfi_restore 3
+  91 00a6 5E       		popl	%esi
+  92              		.cfi_restore 6
+  93 00a7 5D       		popl	%ebp
+  94              		.cfi_restore 5
+  95              		.cfi_def_cfa 4, 4
+  96 00a8 C3       		ret
+  97              		.cfi_endproc
+  98              	.LFE0:
+ 100              		.globl	main
+ 102              	main:
+ 103              	.LFB1:
+  13:hanoi.c       **** int main()
+  14:hanoi.c       **** {
+ 104              		.loc 1 14 1
+ 105              		.cfi_startproc
+ 106 00a9 8D4C2404 		leal	4(%esp), %ecx
+ 107              		.cfi_def_cfa 1, 0
+ 108 00ad 83E4F0   		andl	$-16, %esp
+ 109 00b0 FF71FC   		pushl	-4(%ecx)
+ 110 00b3 55       		pushl	%ebp
+ 111              		.cfi_escape 0x10,0x5,0x2,0x75,0
+ 112 00b4 89E5     		movl	%esp, %ebp
+ 113 00b6 51       		pushl	%ecx
+ 114              		.cfi_escape 0xf,0x3,0x75,0x7c,0x6
+ 115 00b7 83EC04   		subl	$4, %esp
+ 116 00ba E8FCFFFF 		call	__x86.get_pc_thunk.ax
+ 116      FF
+ 117 00bf 05010000 		addl	$_GLOBAL_OFFSET_TABLE_, %eax
+ 117      00
+  15:hanoi.c       ****     hanoi(3, 'A', 'C', 'B');
+ 118              		.loc 1 15 5
+ 119 00c4 6A42     		pushl	$66
+ 120 00c6 6A43     		pushl	$67
+ 121 00c8 6A41     		pushl	$65
+ 122 00ca 6A03     		pushl	$3
+ 123 00cc E8FCFFFF 		call	hanoi
+ 123      FF
+ 124 00d1 83C410   		addl	$16, %esp
+ 125 00d4 B8000000 		movl	$0, %eax
+ 125      00
+  16:hanoi.c       **** }
+ 126              		.loc 1 16 1
+ 127 00d9 8B4DFC   		movl	-4(%ebp), %ecx
+ 128              		.cfi_def_cfa 1, 0
+ 129 00dc C9       		leave
+ 130              		.cfi_restore 5
+ 131 00dd 8D61FC   		leal	-4(%ecx), %esp
+ 132              		.cfi_def_cfa 4, 4
+ 133 00e0 C3       		ret
+ 134              		.cfi_endproc
+ 135              	.LFE1:
+ 137              		.section	.text.__x86.get_pc_thunk.ax,"axG",@progbits,__x86.get_pc_thunk.ax,comdat
+ 138              		.globl	__x86.get_pc_thunk.ax
+ 139              		.hidden	__x86.get_pc_thunk.ax
+ 141              	__x86.get_pc_thunk.ax:
+ 142              	.LFB2:
+ 143              		.cfi_startproc
+ 144 0000 8B0424   		movl	(%esp), %eax
+ 145 0003 C3       		ret
+ 146              		.cfi_endproc
+ 147              	.LFE2:
+ 148              		.section	.text.__x86.get_pc_thunk.bx,"axG",@progbits,__x86.get_pc_thunk.bx,comdat
+ 149              		.globl	__x86.get_pc_thunk.bx
+ 150              		.hidden	__x86.get_pc_thunk.bx
+ 152              	__x86.get_pc_thunk.bx:
+ 153              	.LFB3:
+ 154              		.cfi_startproc
+ 155 0000 8B1C24   		movl	(%esp), %ebx
+ 156 0003 C3       		ret
+ 157              		.cfi_endproc
+ 158              	.LFE3:
+ 159              		.text
+ 160              	.Letext0:

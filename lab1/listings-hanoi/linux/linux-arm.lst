@@ -1,0 +1,160 @@
+   1              		.arch armv5te
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 2
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"hanoi.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.rodata
+  16              		.align	2
+  17              	.LC0:
+  18 0000 4D6F7665 		.ascii	"Move disk 1 from %c to %c\012\000"
+  18      20646973 
+  18      6B203120 
+  18      66726F6D 
+  18      20256320 
+  19 001b 00       		.align	2
+  20              	.LC1:
+  21 001c 4D6F7665 		.ascii	"Move disk %d from %c to %c\012\000"
+  21      20646973 
+  21      6B202564 
+  21      2066726F 
+  21      6D202563 
+  22              		.text
+  23              		.align	2
+  24              		.global	hanoi
+  25              		.syntax unified
+  26              		.arm
+  27              		.fpu softvfp
+  29              	hanoi:
+  30              	.LFB0:
+  31              		.file 1 "hanoi.c"
+   1:hanoi.c       **** #include <stdio.h>
+   2:hanoi.c       **** void hanoi(int n, char from, char to, char aux)
+   3:hanoi.c       **** {
+  32              		.loc 1 3 1
+  33              		.cfi_startproc
+  34              		@ args = 0, pretend = 0, frame = 8
+  35              		@ frame_needed = 1, uses_anonymous_args = 0
+  36 0000 00482DE9 		push	{fp, lr}
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 11, -8
+  39              		.cfi_offset 14, -4
+  40 0004 04B08DE2 		add	fp, sp, #4
+  41              		.cfi_def_cfa 11, 4
+  42 0008 08D04DE2 		sub	sp, sp, #8
+  43 000c 08000BE5 		str	r0, [fp, #-8]
+  44 0010 0100A0E1 		mov	r0, r1
+  45 0014 0210A0E1 		mov	r1, r2
+  46 0018 0320A0E1 		mov	r2, r3
+  47 001c 0030A0E1 		mov	r3, r0
+  48 0020 09304BE5 		strb	r3, [fp, #-9]
+  49 0024 0130A0E1 		mov	r3, r1
+  50 0028 0A304BE5 		strb	r3, [fp, #-10]
+  51 002c 0230A0E1 		mov	r3, r2
+  52 0030 0B304BE5 		strb	r3, [fp, #-11]
+   4:hanoi.c       ****     if (n == 1)
+  53              		.loc 1 4 8
+  54 0034 08301BE5 		ldr	r3, [fp, #-8]
+  55 0038 010053E3 		cmp	r3, #1
+  56 003c 0700001A 		bne	.L2
+   5:hanoi.c       ****         printf("Move disk 1 from %c to %c\n", from, to);
+  57              		.loc 1 5 9
+  58 0040 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+  59 0044 0A205BE5 		ldrb	r2, [fp, #-10]	@ zero_extendqisi2
+  60 0048 0310A0E1 		mov	r1, r3
+  61 004c 60309FE5 		ldr	r3, .L5
+  62              	.LPIC0:
+  63 0050 03308FE0 		add	r3, pc, r3
+  64 0054 0300A0E1 		mov	r0, r3
+  65 0058 FEFFFFEB 		bl	printf(PLT)
+   6:hanoi.c       ****     else
+   7:hanoi.c       ****     {
+   8:hanoi.c       ****         hanoi(n - 1, from, aux, to);
+   9:hanoi.c       ****         printf("Move disk %d from %c to %c\n", n, from, to);
+  10:hanoi.c       ****         hanoi(n - 1, aux, to, from);
+  11:hanoi.c       ****     }
+  12:hanoi.c       **** }
+  66              		.loc 1 12 1
+  67 005c 110000EA 		b	.L4
+  68              	.L2:
+   8:hanoi.c       ****         printf("Move disk %d from %c to %c\n", n, from, to);
+  69              		.loc 1 8 9
+  70 0060 08301BE5 		ldr	r3, [fp, #-8]
+  71 0064 010043E2 		sub	r0, r3, #1
+  72 0068 0A305BE5 		ldrb	r3, [fp, #-10]	@ zero_extendqisi2
+  73 006c 0B205BE5 		ldrb	r2, [fp, #-11]	@ zero_extendqisi2
+  74 0070 09105BE5 		ldrb	r1, [fp, #-9]	@ zero_extendqisi2
+  75 0074 FEFFFFEB 		bl	hanoi(PLT)
+   9:hanoi.c       ****         hanoi(n - 1, aux, to, from);
+  76              		.loc 1 9 9
+  77 0078 09205BE5 		ldrb	r2, [fp, #-9]	@ zero_extendqisi2
+  78 007c 0A305BE5 		ldrb	r3, [fp, #-10]	@ zero_extendqisi2
+  79 0080 08101BE5 		ldr	r1, [fp, #-8]
+  80 0084 2C009FE5 		ldr	r0, .L5+4
+  81              	.LPIC1:
+  82 0088 00008FE0 		add	r0, pc, r0
+  83 008c FEFFFFEB 		bl	printf(PLT)
+  10:hanoi.c       ****     }
+  84              		.loc 1 10 9
+  85 0090 08301BE5 		ldr	r3, [fp, #-8]
+  86 0094 010043E2 		sub	r0, r3, #1
+  87 0098 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+  88 009c 0A205BE5 		ldrb	r2, [fp, #-10]	@ zero_extendqisi2
+  89 00a0 0B105BE5 		ldrb	r1, [fp, #-11]	@ zero_extendqisi2
+  90 00a4 FEFFFFEB 		bl	hanoi(PLT)
+  91              	.L4:
+  92              		.loc 1 12 1
+  93 00a8 0000A0E1 		nop
+  94 00ac 04D04BE2 		sub	sp, fp, #4
+  95              		.cfi_def_cfa 13, 8
+  96              		@ sp needed
+  97 00b0 0088BDE8 		pop	{fp, pc}
+  98              	.L6:
+  99              		.align	2
+ 100              	.L5:
+ 101 00b4 5C000000 		.word	.LC0-(.LPIC0+8)
+ 102 00b8 44000000 		.word	.LC1-(.LPIC1+8)
+ 103              		.cfi_endproc
+ 104              	.LFE0:
+ 106              		.align	2
+ 107              		.global	main
+ 108              		.syntax unified
+ 109              		.arm
+ 110              		.fpu softvfp
+ 112              	main:
+ 113              	.LFB1:
+  13:hanoi.c       **** int main()
+  14:hanoi.c       **** {
+ 114              		.loc 1 14 1
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 1, uses_anonymous_args = 0
+ 118 00bc 00482DE9 		push	{fp, lr}
+ 119              		.cfi_def_cfa_offset 8
+ 120              		.cfi_offset 11, -8
+ 121              		.cfi_offset 14, -4
+ 122 00c0 04B08DE2 		add	fp, sp, #4
+ 123              		.cfi_def_cfa 11, 4
+  15:hanoi.c       ****     hanoi(3, 'A', 'C', 'B');
+ 124              		.loc 1 15 5
+ 125 00c4 4230A0E3 		mov	r3, #66
+ 126 00c8 4320A0E3 		mov	r2, #67
+ 127 00cc 4110A0E3 		mov	r1, #65
+ 128 00d0 0300A0E3 		mov	r0, #3
+ 129 00d4 FEFFFFEB 		bl	hanoi(PLT)
+ 130 00d8 0030A0E3 		mov	r3, #0
+  16:hanoi.c       **** }
+ 131              		.loc 1 16 1
+ 132 00dc 0300A0E1 		mov	r0, r3
+ 133 00e0 0088BDE8 		pop	{fp, pc}
+ 134              		.cfi_endproc
+ 135              	.LFE1:
+ 137              	.Letext0:

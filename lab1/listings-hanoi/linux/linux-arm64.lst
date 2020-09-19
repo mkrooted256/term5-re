@@ -1,0 +1,131 @@
+   1              		.arch armv8-a
+   2              		.file	"hanoi.c"
+   3              		.text
+   4              	.Ltext0:
+   5              		.section	.rodata
+   6              		.align	3
+   7              	.LC0:
+   8 0000 4D6F7665 		.string	"Move disk 1 from %c to %c\n"
+   8      20646973 
+   8      6B203120 
+   8      66726F6D 
+   8      20256320 
+   9 001b 00000000 		.align	3
+   9      00
+  10              	.LC1:
+  11 0020 4D6F7665 		.string	"Move disk %d from %c to %c\n"
+  11      20646973 
+  11      6B202564 
+  11      2066726F 
+  11      6D202563 
+  12              		.text
+  13              		.align	2
+  14              		.global	hanoi
+  16              	hanoi:
+  17              	.LFB0:
+  18              		.file 1 "hanoi.c"
+   1:hanoi.c       **** #include <stdio.h>
+   2:hanoi.c       **** void hanoi(int n, char from, char to, char aux)
+   3:hanoi.c       **** {
+  19              		.loc 1 3 1
+  20              		.cfi_startproc
+  21 0000 FD7BBEA9 		stp	x29, x30, [sp, -32]!
+  22              		.cfi_def_cfa_offset 32
+  23              		.cfi_offset 29, -32
+  24              		.cfi_offset 30, -24
+  25 0004 FD030091 		mov	x29, sp
+  26 0008 E01F00B9 		str	w0, [sp, 28]
+  27 000c E16F0039 		strb	w1, [sp, 27]
+  28 0010 E26B0039 		strb	w2, [sp, 26]
+  29 0014 E3670039 		strb	w3, [sp, 25]
+   4:hanoi.c       ****     if (n == 1)
+  30              		.loc 1 4 8
+  31 0018 E01F40B9 		ldr	w0, [sp, 28]
+  32 001c 1F040071 		cmp	w0, 1
+  33 0020 21010054 		bne	.L2
+   5:hanoi.c       ****         printf("Move disk 1 from %c to %c\n", from, to);
+  34              		.loc 1 5 9
+  35 0024 E06F4039 		ldrb	w0, [sp, 27]
+  36 0028 E16B4039 		ldrb	w1, [sp, 26]
+  37 002c E203012A 		mov	w2, w1
+  38 0030 E103002A 		mov	w1, w0
+  39 0034 00000090 		adrp	x0, .LC0
+  40 0038 00000091 		add	x0, x0, :lo12:.LC0
+  41 003c 00000094 		bl	printf
+   6:hanoi.c       ****     else
+   7:hanoi.c       ****     {
+   8:hanoi.c       ****         hanoi(n - 1, from, aux, to);
+   9:hanoi.c       ****         printf("Move disk %d from %c to %c\n", n, from, to);
+  10:hanoi.c       ****         hanoi(n - 1, aux, to, from);
+  11:hanoi.c       ****     }
+  12:hanoi.c       **** }
+  42              		.loc 1 12 1
+  43 0040 15000014 		b	.L4
+  44              	.L2:
+   8:hanoi.c       ****         printf("Move disk %d from %c to %c\n", n, from, to);
+  45              		.loc 1 8 9
+  46 0044 E01F40B9 		ldr	w0, [sp, 28]
+  47 0048 00040051 		sub	w0, w0, #1
+  48 004c E36B4039 		ldrb	w3, [sp, 26]
+  49 0050 E2674039 		ldrb	w2, [sp, 25]
+  50 0054 E16F4039 		ldrb	w1, [sp, 27]
+  51 0058 00000094 		bl	hanoi
+   9:hanoi.c       ****         hanoi(n - 1, aux, to, from);
+  52              		.loc 1 9 9
+  53 005c E06F4039 		ldrb	w0, [sp, 27]
+  54 0060 E16B4039 		ldrb	w1, [sp, 26]
+  55 0064 E303012A 		mov	w3, w1
+  56 0068 E203002A 		mov	w2, w0
+  57 006c E11F40B9 		ldr	w1, [sp, 28]
+  58 0070 00000090 		adrp	x0, .LC1
+  59 0074 00000091 		add	x0, x0, :lo12:.LC1
+  60 0078 00000094 		bl	printf
+  10:hanoi.c       ****     }
+  61              		.loc 1 10 9
+  62 007c E01F40B9 		ldr	w0, [sp, 28]
+  63 0080 00040051 		sub	w0, w0, #1
+  64 0084 E36F4039 		ldrb	w3, [sp, 27]
+  65 0088 E26B4039 		ldrb	w2, [sp, 26]
+  66 008c E1674039 		ldrb	w1, [sp, 25]
+  67 0090 00000094 		bl	hanoi
+  68              	.L4:
+  69              		.loc 1 12 1
+  70 0094 1F2003D5 		nop
+  71 0098 FD7BC2A8 		ldp	x29, x30, [sp], 32
+  72              		.cfi_restore 30
+  73              		.cfi_restore 29
+  74              		.cfi_def_cfa_offset 0
+  75 009c C0035FD6 		ret
+  76              		.cfi_endproc
+  77              	.LFE0:
+  79              		.align	2
+  80              		.global	main
+  82              	main:
+  83              	.LFB1:
+  13:hanoi.c       **** int main()
+  14:hanoi.c       **** {
+  84              		.loc 1 14 1
+  85              		.cfi_startproc
+  86 00a0 FD7BBFA9 		stp	x29, x30, [sp, -16]!
+  87              		.cfi_def_cfa_offset 16
+  88              		.cfi_offset 29, -16
+  89              		.cfi_offset 30, -8
+  90 00a4 FD030091 		mov	x29, sp
+  15:hanoi.c       ****     hanoi(3, 'A', 'C', 'B');
+  91              		.loc 1 15 5
+  92 00a8 43088052 		mov	w3, 66
+  93 00ac 62088052 		mov	w2, 67
+  94 00b0 21088052 		mov	w1, 65
+  95 00b4 60008052 		mov	w0, 3
+  96 00b8 00000094 		bl	hanoi
+  97 00bc 00008052 		mov	w0, 0
+  16:hanoi.c       **** }
+  98              		.loc 1 16 1
+  99 00c0 FD7BC1A8 		ldp	x29, x30, [sp], 16
+ 100              		.cfi_restore 30
+ 101              		.cfi_restore 29
+ 102              		.cfi_def_cfa_offset 0
+ 103 00c4 C0035FD6 		ret
+ 104              		.cfi_endproc
+ 105              	.LFE1:
+ 107              	.Letext0:
